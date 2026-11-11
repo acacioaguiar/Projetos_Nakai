@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAITEC - Plataforma de Cursos</title>
+    <style>
+        /* ================= RESET E VARIÁVEIS ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-color-outer: #e6ebf5; 
+            --bg-color-inner: #ffffff;
+            --header-footer-bg: #757575;
+            --text-main: #333;
+            --gray-light: #e0e0e0;
+            --gray-medium: #c0c0c0;
+            --gray-dark: #888;
+            
+            --line-green: #4caf50;
+            --line-red: #f44336;
+            --line-yellow: #ffeb3b;
+        }
+
+        body {
+            background-color: var(--bg-color-outer);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--bg-color-inner);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: var(--header-footer-bg);
+            color: white;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* Estilo aplicado para a imagem da logo real */
+        .logo-img {
+            height: 35px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        /* ================= PÁGINA INICIAL (CATÁLOGO) ================= */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+        }
+
+        .profile-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--gray-light);
+            border-radius: 50%;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--gray-light);
+            font-size: 1rem;
+            color: #555;
+            outline: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestions {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .suggestion-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--gray-light);
+            color: var(--text-main);
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Carrossel de Cursos */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+        }
+
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-main);
+            padding: 10px;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-bottom: 10px;
+            flex: 1;
+        }
+
+        .card {
+            min-width: 220px;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo para quando não tem imagem (quadrado cinza) */
+        .card-img-placeholder {
+            width: 100%;
+            height: 120px;
+            background-color: #8a8a8a;
+            margin-bottom: 5px;
+        }
+
+        /* NOVA REGRA CSS: Estilo para as imagens reais nos cards */
+        .card-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .color-line {
+            height: 3px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .color-line.green { background-color: var(--line-green); }
+        .color-line.red { background-color: var(--line-red); }
+        .color-line.yellow { background-color: var(--line-yellow); }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background-color: #d9d9d9;
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            color: #555;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        .card-rating {
+            font-size: 0.75rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stars { color: #888; letter-spacing: 1px; }
+
+        /* ================= PÁGINA DO ARTIGO ================= */
+        #article-page {
+            display: none;
+            position: relative;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            left: 0;
+            top: 50px;
+            background-color: #d9d9d9;
+            padding: 1.5rem 0.5rem 1.5rem 1.5rem;
+            border-radius: 0 40px 40px 0;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .article-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 3rem;
+        }
+
+        .article-section {
+            margin-bottom: 2rem;
+        }
+
+        .article-section h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .image-block {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .image-block h3 {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .image-placeholder-large {
+            width: 100%;
+            height: 250px;
+            background-color: var(--gray-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .image-caption {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .callout-box {
+            background-color: var(--gray-light);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            margin: 2rem auto;
+            width: 60%;
+        }
+
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .article-navigation button {
+            background-color: var(--gray-light);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background-color: var(--header-footer-bg);
+            color: white;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info p {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-info a {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- HEADER GLOBAL -->
+        <header>
+            <div class="logo-container" onclick="showPage('home-page')">
+                <!-- INCLUA O LINK OU ARQUIVO DA SUA LOGO AQUI NO SRC -->
+                <img src="COLOQUE_O_LINK_OU_ARQUIVO_DA_LOGO_AQUI" alt="Logo RAITEC" class="logo-img">
+            </div>
+            <nav class="nav-links">
+                <a onclick="showPage('home-page')">INÍCIO</a>
+                <a href="#">CURSOS</a>
+                <a href="#">EXERCÍCIOS</a>
+            </nav>
+            <nav class="nav-links">
+                <a href="#">SOBRE O RAITEC</a>
+                <a href="#">CONTATO</a>
+            </nav>
+        </header>
+
+        <!-- PÁGINA: INÍCIO (CATÁLOGO) -->
+        <main id="home-page" class="main-content">
+            <div class="page-header">
+                <h1>Catálogo de cursos</h1>
+                <div class="profile-icon"></div>
+            </div>
+
+            <input type="text" class="search-bar" placeholder="O que você está procurando?">
+
+            <div class="suggestions">
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+            </div>
+
+            <!-- Seção: Cursos Teóricos (COM IMAGENS) -->
+            <h2 class="section-title">Cursos Teóricos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-1', -300)">&lt;</button>
+                <div class="carousel" id="carousel-1">
+                    
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1593106323606-d7b1a6c429cb?q=80&w=300&h=120&auto=format&fit=crop" alt="Foto de uma placa Arduino" class="card-img">
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=300&h=120&auto=format&fit=crop" alt="Circuito eletrônico" class="card-img">
+                        <div class="color-line green"></div>
+                        <h3>Circuitos Básicos</h3>
+                        <div class="badges"><span class="badge">Eletrônica</span><span class="badge">Iniciante</span></div>
+                        <p class="card-desc">Sobre os componentes...</p>
+                        <p class="card-desc">Tempo: 3h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.8 <span>15 avaliações</span></div>
+                    </div>
+
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1563770660941-20978e870e26?q=80&w=300&h=120&auto=format&fit=crop" alt="Mão segurando ferro de solda" class="card-img">
+                        <div class="color-line yellow"></div>
+                        <h3>Soldagem e Protótipos</h3>
+                        <div class="badges"><span class="badge">Prático</span><span class="badge">Técnico</span></div>
+                        <p class="card-desc">Técnicas de solda...</p>
+                        <p class="card-desc">Tempo: 4h</p>
+                        <div class="card-rating"><span class="stars">★★★★☆</span> 4.7 <span>8 avaliações</span></div>
+                    </div>
+
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1555664424-778a1e5e1b48?q=80&w=300&h=120&auto=format&fit=crop" alt="Vários componentes eletrônicos" class="card-img">
+                        <div class="color-line red"></div>
+                        <h3>Introdução a IoT</h3>
+                        <div class="badges"><span class="badge">Conectividade</span><span class="badge">Avançado</span></div>
+                        <p class="card-desc">Sensores e a nuvem...</p>
+                        <p class="card-desc">Tempo: 5h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 5.0 <span>22 avaliações</span></div>
+                    </div>
+
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-1', 300)">&gt;</button>
+            </div>
+
+            <!-- Seção: Exercícios Práticos (MANTIDO SEM IMAGEM PARA EXEMPLO) -->
+            <h2 class="section-title">Exercícios Práticos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-2', -300)">&lt;</button>
+                <div class="carousel" id="carousel-2">
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line red"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-2', 300)">&gt;</button>
+            </div>
+
+            <!-- Seção: Meus Favoritos (MANTIDO SEM IMAGEM PARA EXEMPLO) -->
+            <h2 class="section-title">Meus Favoritos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-3', -300)">&lt;</button>
+                <div class="carousel" id="carousel-3">
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line yellow"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="co<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAITEC - Plataforma de Cursos</title>
+    <style>
+        /* ================= RESET E VARIÁVEIS ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-color-outer: #e6ebf5; 
+            --bg-color-inner: #ffffff;
+            --header-footer-bg: #757575;
+            --text-main: #333;
+            --gray-light: #e0e0e0;
+            --gray-medium: #c0c0c0;
+            --gray-dark: #888;
+            
+            --line-green: #4caf50;
+            --line-red: #f44336;
+            --line-yellow: #ffeb3b;
+        }
+
+        body {
+            background-color: var(--bg-color-outer);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--bg-color-inner);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: var(--header-footer-bg);
+            color: white;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            min-width: max-content;
+        }
+
+        .logo-img {
+            height: 35px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        /* Nova Barra de Pesquisa no Header */
+        .header-search {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+            padding: 0 1rem;
+        }
+
+        .header-search-bar {
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--gray-light);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+            width: 250px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .header-search-bar:focus {
+            width: 320px;
+            background-color: #ffffff;
+        }
+
+        /* ================= PÁGINA INICIAL (CATÁLOGO) ================= */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+        }
+
+        .profile-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--gray-light);
+            border-radius: 50%;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--gray-light);
+            font-size: 1rem;
+            color: #555;
+            outline: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestions {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .suggestion-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--gray-light);
+            color: var(--text-main);
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Carrossel de Cursos */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+        }
+
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-main);
+            padding: 10px;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding-bottom: 10px;
+            flex: 1;
+        }
+
+        .card {
+            min-width: 220px;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-img-placeholder {
+            width: 100%;
+            height: 120px;
+            background-color: #8a8a8a;
+            margin-bottom: 5px;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .color-line {
+            height: 3px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .color-line.green { background-color: var(--line-green); }
+        .color-line.red { background-color: var(--line-red); }
+        .color-line.yellow { background-color: var(--line-yellow); }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            background-color: #d9d9d9;
+            font-size: 0.65rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            color: #555;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        .card-rating {
+            font-size: 0.75rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stars { color: #888; letter-spacing: 1px; }
+
+        /* ================= PÁGINA DO ARTIGO ================= */
+        #article-page {
+            display: none;
+            position: relative;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            left: 0;
+            top: 50px;
+            background-color: #d9d9d9;
+            padding: 1.5rem 0.5rem 1.5rem 1.5rem;
+            border-radius: 0 40px 40px 0;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .article-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 3rem;
+        }
+
+        /* Classes para a paginação do artigo */
+        .article-step {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .article-section {
+            margin-bottom: 2rem;
+        }
+
+        .article-section h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .image-block {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .image-block h3 {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .image-placeholder-large {
+            width: 100%;
+            height: 250px;
+            background-color: var(--gray-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .image-caption {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .callout-box {
+            background-color: var(--gray-light);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            margin: 2rem auto;
+            width: 60%;
+        }
+
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .article-navigation button {
+            background-color: var(--gray-light);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .article-navigation button:hover {
+            background-color: #d0d0d0;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background-color: var(--header-footer-bg);
+            color: white;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info p {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-info a {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- HEADER GLOBAL -->
+        <header>
+            <div class="logo-container" onclick="showPage('home-page')">
+                <img src="COLOQUE_O_LINK_OU_ARQUIVO_DA_LOGO_AQUI" alt="Logo RAITEC" class="logo-img">
+            </div>
+            
+            <nav class="nav-links">
+                <a onclick="showPage('home-page')">INÍCIO</a>
+                <a href="#">CURSOS</a>
+                <a href="#">EXERCÍCIOS</a>
+            </nav>
+
+            <!-- BARRA DE PESQUISA ADICIONADA AQUI -->
+            <div class="header-search">
+                <input type="text" class="header-search-bar" placeholder="Pesquisar cursos e exercícios...">
+            </div>
+
+            <nav class="nav-links">
+                <a href="#">SOBRE O RAITEC</a>
+                <a href="#">CONTATO</a>
+            </nav>
+        </header>
+
+        <!-- PÁGINA: INÍCIO (CATÁLOGO) -->
+        <main id="home-page" class="main-content">
+            <div class="page-header">
+                <h1>Catálogo de cursos</h1>
+                <div class="profile-icon"></div>
+            </div>
+
+            <input type="text" class="search-bar" placeholder="O que você está procurando?">
+
+            <div class="suggestions">
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+                <button class="suggestion-btn">Sugestão</button>
+            </div>
+
+            <h2 class="section-title">Cursos Teóricos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-1', -300)">&lt;</button>
+                <div class="carousel" id="carousel-1">
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1593106323606-d7b1a6c429cb?q=80&w=300&h=120&auto=format&fit=crop" alt="Foto de uma placa Arduino" class="card-img">
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=300&h=120&auto=format&fit=crop" alt="Circuito eletrônico" class="card-img">
+                        <div class="color-line green"></div>
+                        <h3>Circuitos Básicos</h3>
+                        <div class="badges"><span class="badge">Eletrônica</span><span class="badge">Iniciante</span></div>
+                        <p class="card-desc">Sobre os componentes...</p>
+                        <p class="card-desc">Tempo: 3h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.8 <span>15 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1563770660941-20978e870e26?q=80&w=300&h=120&auto=format&fit=crop" alt="Mão segurando ferro de solda" class="card-img">
+                        <div class="color-line yellow"></div>
+                        <h3>Soldagem e Protótipos</h3>
+                        <div class="badges"><span class="badge">Prático</span><span class="badge">Técnico</span></div>
+                        <p class="card-desc">Técnicas de solda...</p>
+                        <p class="card-desc">Tempo: 4h</p>
+                        <div class="card-rating"><span class="stars">★★★★☆</span> 4.7 <span>8 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <img src="https://images.unsplash.com/photo-1555664424-778a1e5e1b48?q=80&w=300&h=120&auto=format&fit=crop" alt="Vários componentes eletrônicos" class="card-img">
+                        <div class="color-line red"></div>
+                        <h3>Introdução a IoT</h3>
+                        <div class="badges"><span class="badge">Conectividade</span><span class="badge">Avançado</span></div>
+                        <p class="card-desc">Sensores e a nuvem...</p>
+                        <p class="card-desc">Tempo: 5h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 5.0 <span>22 avaliações</span></div>
+                    </div>
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-1', 300)">&gt;</button>
+            </div>
+
+            <h2 class="section-title">Exercícios Práticos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-2', -300)">&lt;</button>
+                <div class="carousel" id="carousel-2">
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line red"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Farol com timer</h3>
+                        <div class="badges"><span class="badge">Arduino Uno</span><span class="badge">Fácil</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo médio: 10min</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-2', 300)">&gt;</button>
+            </div>
+
+            <h2 class="section-title">Meus Favoritos</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-3', -300)">&lt;</button>
+                <div class="carousel" id="carousel-3">
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line green"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line yellow"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                    <div class="card" onclick="showPage('article-page')">
+                        <div class="card-img-placeholder"></div>
+                        <div class="color-line red"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-3', 300)">&gt;</button>
+            </div>
+        </main>
+
+        <!-- PÁGINA: ARTIGO -->
+        <main id="article-page" class="main-content">
+            <div class="sidebar-toggle">|||</div>
+            
+            <div class="article-container">
+                <h1 class="article-title">Arduino Uno</h1>
+                
+                <!-- PÁGINA 1 DO ARTIGO -->
+                <div id="step-1" class="article-step">
+                    <div class="article-section">
+                        <h2>Introdução</h2>
+                        <p>O Arduino é uma plataforma de prototipagem de hardware livre amplamente utilizada por estudantes, entusiastas e profissionais para criar soluções tecnológicas de forma simples e acessível.</p>
+                    </div>
+                    <div class="article-section">
+                        <h2>Análise</h2>
+                        <p>O primeiro passo para entender como o Arduino Uno funciona, é compreender sua estrutura e pinagem. Ele é composto por um microcontrolador, pinos digitais, pinos analógicos, entrada USB e entrada de alimentação.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 2 DO ARTIGO -->
+                <div id="step-2" class="article-step">
+                    <div class="image-block">
+                        <h3>Estrutura do Arduino Uno</h3>
+                        <div class="image-placeholder-large"></div>
+                        <span class="image-caption">Fonte: o autor</span>
+                    </div>
+                    <p>Na imagem, é possível ver quais são cada um desses componentes em detalhes. A porta USB serve para programação, enquanto o conector P4 fornece energia externa.</p>
+                </div>
+
+                <!-- PÁGINA 3 DO ARTIGO -->
+                <div id="step-3" class="article-step">
+                    <div class="callout-box">
+                        Pontos importantes
+                    </div>
+                    <p>Ou seja, é importante que você conecte os cabos corretamente nos pinos de 5V e GND (Terra) para não causar curtos-circuitos no seu projeto.</p>
+                    <p>Agora você está pronto para iniciar as práticas do módulo!</p>
+                </div>
+
+                <!-- BOTÕES DE NAVEGAÇÃO -->
+                <div class="article-navigation">
+                    <button id="btn-prev" onclick="changeArticlePage(-1)">Anterior</button>
+                    <button id="btn-next" onclick="changeArticlePage(1)">Próximo</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER GLOBAL -->
+        <footer>
+            <div class="footer-info">
+                <div class="logo-container" style="margin-bottom: 10px;">
+                    <img src="COLOQUE_O_LINK_OU_ARQUIVO_DA_LOGO_AQUI" alt="Logo RAITEC" class="logo-img">
+                </div>
+                <p>© 2025 RAITEC — Todos os direitos reservados.</p>
+                <p>Contato: <a href="mailto:raitec@ufc.br">raitec@ufc.br</a></p>
+            </div>
+            <div class="social-icons">
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Variáveis de controle de paginação do artigo
+        let currentArticleStep = 1;
+        const totalSteps = 3; // Total de "páginas" dentro do artigo
+
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('article-page').style.display = 'none';
+            
+            document.getElementById(pageId).style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Se abrir a página do artigo, reinicia para a página 1 (step-1)
+            if (pageId === 'article-page') {
+                currentArticleStep = 1;
+                updateArticleView();
+            }
+        }
+
+        // Função para rolar os carrosséis da Home
+        function scrollCarousel(carouselId, scrollOffset) {
+            const carousel = document.getElementById(carouselId);
+            carousel.scrollBy({
+                left: scrollOffset,
+                behavior: 'smooth'
+            });
+        }
+
+        // Função ativada pelos botões Anterior e Próximo
+        function changeArticlePage(direction) {
+            currentArticleStep += direction;
+            updateArticleView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Função responsável por mostrar a parte certa do texto e sumir os botões quando necessário
+        function updateArticleView() {
+            // Esconde todas as páginas do artigo
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById('step-' + i).style.display = 'none';
+            }
+            
+            // Mostra a página atual
+            document.getElementById('step-' + currentArticleStep).style.display = 'block';
+
+            // Lógica de visibilidade dos botões
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            if (currentArticleStep === 1) {
+                btnPrev.style.visibility = 'hidden'; // Oculta no primeiro passo
+            } else {
+                btnPrev.style.visibility = 'visible'; // Mostra nos demais
+            }
+
+            if (currentArticleStep === totalSteps) {
+                btnNext.style.visibility = 'hidden'; // Oculta no último passo
+            } else {
+                btnNext.style.visibility = 'visible'; // Mostra nos demais
+            }
+        }
+    </script>
+</body>
+</html>lor-line red"></div>
+                        <h3>Arduino Uno</h3>
+                        <div class="badges"><span class="badge">Microcontrolador</span><span class="badge">Básico</span></div>
+                        <p class="card-desc">Sobre o módulo...</p>
+                        <p class="card-desc">Tempo: 2h</p>
+                        <div class="card-rating"><span class="stars">★★★★★</span> 4.9 <span>10 avaliações</span></div>
+                    </div>
+                </div>
+                <button class="nav-arrow" onclick="scrollCarousel('carousel-3', 300)">&gt;</button>
+            </div>
+        </main>
+
+        <!-- PÁGINA: ARTIGO -->
+        <main id="article-page" class="main-content">
+            <div class="sidebar-toggle">|||</div>
+            
+            <div class="article-container">
+                <h1 class="article-title">Arduino Uno</h1>
+                
+                <div class="article-section">
+                    <h2>Introdução</h2>
+                    <p>O Arduino é uma plataforma de prototipagem de hardware livre amplamente utilizada por estudantes, entusiastas e profissionais para criar soluções tecnológicas de forma simples e acessível.</p>
+                </div>
+
+                <div class="article-section">
+                    <h2>Análise</h2>
+                    <p>O primeiro passo para entender como o Arduino Uno funciona, é compreender sua estrutura e pinagem. Ele é composto por um microcontrolador, pinos digitais, pinos analógicos, entrada USB e entrada de alimentação.</p>
+                </div>
+
+                <div class="image-block">
+                    <h3>Título - Imagem</h3>
+                    <div class="image-placeholder-large"></div>
+                    <span class="image-caption">Fonte: o autor</span>
+                </div>
+
+                <p>Na imagem, é possível ver quais são cada um desse componentes, vale ressaltar, que:</p>
+
+                <div class="callout-box">
+                    Pontos importantes
+                </div>
+
+                <p>Ou seja, é importante que...</p>
+
+                <div class="article-navigation">
+                    <button>Anterior</button>
+                    <button>Próximo</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER GLOBAL -->
+        <footer>
+            <div class="footer-info">
+                <div class="logo-container" style="margin-bottom: 10px;">
+                    <!-- INCLUA O LINK OU ARQUIVO DA SUA LOGO AQUI NO SRC TAMBÉM -->
+                    <img src="COLOQUE_O_LINK_OU_ARQUIVO_DA_LOGO_AQUI" alt="Logo RAITEC" class="logo-img">
+                </div>
+                <p>© 2025 RAITEC — Todos os direitos reservados.</p>
+                <p>Contato: <a href="mailto:raitec@ufc.br">raitec@ufc.br</a></p>
+            </div>
+            <div class="social-icons">
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+                <div class="social-icon"></div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Função para alternar entre as páginas (Início e Artigo)
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('article-page').style.display = 'none';
+            document.getElementById(pageId).style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Função para fazer os carrosséis rolarem com as setas
+        function scrollCarousel(carouselId, scrollOffset) {
+            const carousel = document.getElementById(carouselId);
+            carousel.scrollBy({
+                left: scrollOffset,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
